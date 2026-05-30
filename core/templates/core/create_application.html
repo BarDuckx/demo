@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-panel auth-box" style="max-width: 600px;">
+    <h2 style="margin-bottom: 20px; text-align: center;">Новая заявка на курс</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label class="form-label">Выбор программы обучения</label>
+        {{ form.course_name }}
+        {% if form.course_name.errors %}<span class="error">{{ form.course_name.errors.0 }}</span>{% endif %}
+
+        <label class="form-label">Желаемая дата начала</label>
+        <input type="text" name="start_date" placeholder="ДД.ММ.ГГГГ" required class="date-mask">
+        {% if form.start_date.errors %}<span class="error">{{ form.start_date.errors.0 }}</span>{% endif %}
+
+        <label class="form-label">Способ проведения оплаты</label>
+        {{ form.payment_method }}
+        {% if form.payment_method.errors %}<span class="error">{{ form.payment_method.errors.0 }}</span>{% endif %}
+
+        <button type="submit" style="margin-top: 10px;">Отправить на рассмотрение</button>
+    </form>
+</div>
+
+<script>
+    const dateInput = document.querySelector('.date-mask');
+    if (dateInput) {
+        dateInput.addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,2})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + (x[3] ? '.' + x[3] : '');
+        });
+    }
+</script>
+{% endblock %}
